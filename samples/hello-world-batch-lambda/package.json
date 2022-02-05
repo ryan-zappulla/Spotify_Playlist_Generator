@@ -1,0 +1,8 @@
+{
+    "name": "hello-world-lambda",
+    "type": "module",
+    "description": "",
+    "version": "1.0",
+    "main": "index.mjs",
+    "author": "Ryan Zappulla"
+  }
