@@ -16,5 +16,8 @@
   },
   "homepage": "https://github.com/rewq455/Spotify_Playlist_Generator#readme",
   "description": "",
-  "private": "true"
+  "private": "true",
+  "dependencies": {
+    "spotify-web-api-node": "^5.0.2"
+  }
 }
