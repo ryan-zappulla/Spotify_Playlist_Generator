@@ -1,0 +1,90 @@
+{
+	"info": {
+		"_postman_id": "18bbc376-a73f-4039-baaa-0dc35e96d96c",
+		"name": "Spotify API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get Auth Key",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"var client_credentials = (environment.client_id + ':' + environment.client_secret).encodeBase64();",
+							"postman.setEnvironmentVariable(\"client_credentials\", client_credentials);",
+							"",
+							"environment.cloned_environment && (delete environment.cloned_environment);",
+							"var environmentObjClone = _.cloneDeep(environment);",
+							"postman.setEnvironmentVariable(\"cloned_environment\", JSON.stringify(environmentObjClone));"
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = (responseCode.code === 200);",
+							"",
+							"if (responseCode.code === 200) {",
+							"    try {",
+							"        var authorization = JSON.parse(responseBody).access_token,",
+							"            refresh_token = JSON.parse(responseBody).refresh_token;",
+							"        postman.setEnvironmentVariable(\"authorization\", authorization);",
+							"        refresh_token && postman.setEnvironmentVariable(\"refresh_token\", refresh_token);",
+							"        postman.setNextRequest(\"Get Artist\");",
+							"        console.log(\"Authorization retrieved. Moving to Get Artist.\");",
+							"    }",
+							"    catch (e) {",
+							"        console.log(e);",
+							"        throw false;",
+							"    }",
+							"}"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic {{client_credentials}}"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "grant_type",
+							"value": "refresh_token",
+							"type": "text"
+						},
+						{
+							"key": "refresh_token",
+							"value": "{{refresh_token}}",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://accounts.spotify.com/api/token",
+					"protocol": "https",
+					"host": [
+						"accounts",
+						"spotify",
+						"com"
+					],
+					"path": [
+						"api",
+						"token"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
