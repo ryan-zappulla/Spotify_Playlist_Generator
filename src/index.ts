@@ -11,10 +11,27 @@ export async function handler(): Promise<void> {
             }) 
         .then(
             (response) => {
-                let songs = new Set(response.body.items.flatMap(song => song.track.name)); //Remove duplicates
+                let songs = new Set(response.body.items.flatMap(song => `spotify:track:${song.track.id}`)); //Remove duplicates
                 songs.forEach(song => {
                     console.log(song);
                 });
+                spotify.createPlaylist('My Programmed Playlist', { 'public': false })
+                .then(
+                    (data) => {
+                        let id = data.body.id;
+                        spotify.addTracksToPlaylist(id, Array.from(songs))
+                        .then(
+                            () => {
+                                console.log('Created the playlist!');
+                            }, (error) => {
+                                handle_error(error);
+                            }
+                        );
+                    }, 
+                    (error) => {
+                        handle_error(error)
+                    }
+                );
             },
             (error) => {
                 handle_error(error);
