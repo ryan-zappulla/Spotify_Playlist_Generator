@@ -9,10 +9,19 @@ const config = require('./config.json');
 export async function handler() {
     let spotify = initialize_spotify();
     spotify
-        .getMe()
-        .then(response => {
-            console.log(response);
-        });
+        .getMyRecentlyPlayedTracks({ limit: 50 })
+        .then(
+            function(response)
+            {
+                response.body.items.forEach(song => {
+                    console.log(song.track.name);
+                });
+            },
+            function(error)
+            {
+                console.log(error);
+            }
+        );
 }
 
 function initialize_spotify()
