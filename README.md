@@ -20,3 +20,9 @@ You can get an access and refresh token by following the OAuth2 flow against Spo
 	* user-top-read
 ### local_runner
 There is an included local_runner app that imports the Lambda handler defined in the src folder and runs it locally. Long term, it will also be used to pass configuration into the main app.
+
+## Sources
+https://developer.spotify.com/documentation/web-api/quick-start/
+https://blog.postman.com/generate-spotify-playlists-using-a-postman-collection/
+https://github.com/thelinmichael/spotify-web-api-node
+
