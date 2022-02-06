@@ -11,12 +11,13 @@ export async function handler() {
     spotify
         .getMyRecentlyPlayedTracks(
             { 
-                limit: 50 //This is the limit, I can pass it via pagination if I want
+                limit: 50 //This is the limit, I can get more via pagination if I want
             }) 
         .then(
             (response) => {
-                response.body.items.forEach(song => {
-                    console.log(song.track.name);
+                let songs = new Set(response.body.items.flatMap(song => song.track.name)); //Remove duplicates
+                songs.forEach(song => {
+                    console.log(song);
                 });
             },
             (error) => {
