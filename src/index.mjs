@@ -9,16 +9,18 @@ const config = require('./config.json');
 export async function handler() {
     let spotify = initialize_spotify();
     spotify
-        .getMyRecentlyPlayedTracks({ limit: 50 })
+        .getMyRecentlyPlayedTracks(
+            { 
+                limit: 50, //This is the limit, I can pass it via pagination if I want
+                type: 'track' 
+            }) 
         .then(
-            function(response)
-            {
+            (response) => {
                 response.body.items.forEach(song => {
                     console.log(song.track.name);
                 });
             },
-            function(error)
-            {
+            (error) => {
                 console.log(error);
             }
         );
