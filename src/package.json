@@ -18,10 +18,12 @@
   "description": "",
   "private": "true",
   "dependencies": {
-    "spotify-web-api-node": "^5.0.2"
+    "spotify-web-api-node": "^5.0.2",
+    "underscore": "^1.13.2"
   },
   "devDependencies": {
     "@types/node": "^17.0.15",
-    "@types/spotify-web-api-node": "^5.0.7"
+    "@types/spotify-web-api-node": "^5.0.7",
+    "@types/underscore": "^1.11.4"
   }
 }

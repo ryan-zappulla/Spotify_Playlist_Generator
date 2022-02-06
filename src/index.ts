@@ -1,4 +1,6 @@
 import SpotifyWebApi = require("spotify-web-api-node");
+import _ = require("underscore");
+
 //TODO: Replace this with environment variables for when we are running in the Lambda
 const config = require('./config.json');
 
@@ -15,11 +17,11 @@ export async function handler(): Promise<void> {
                 songs.forEach(song => {
                     console.log(song);
                 });
-                spotify.createPlaylist('My Programmed Playlist', { 'public': false })
+                spotify.createPlaylist(`Programmed Playlist - ${new Date().toLocaleString()}`, { 'public': false })
                 .then(
                     (data) => {
                         let id = data.body.id;
-                        spotify.addTracksToPlaylist(id, Array.from(songs))
+                        spotify.addTracksToPlaylist(id, _.shuffle(Array.from(songs)))
                         .then(
                             () => {
                                 console.log('Created the playlist!');
