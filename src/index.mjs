@@ -1,3 +1,4 @@
+//TODO: Migrate to TypeScript
 import SpotifyWebApi from 'spotify-web-api-node';
 
 //This is required to import a json file in ES6
@@ -7,7 +8,7 @@ const require = createRequire(import.meta.url);
 const config = require('./config.json');
 
 export async function handler() {
-    let spotify = initialize_spotify();
+    const spotify = await(initialize_spotify());
     spotify
         .getMyRecentlyPlayedTracks(
             { 
@@ -21,15 +22,33 @@ export async function handler() {
                 });
             },
             (error) => {
-                console.log(error);
+                handle_error(error);
             }
         );
 }
 
-function initialize_spotify()
+async function initialize_spotify()
 {
     let spotify = new SpotifyWebApi();
-    spotify.setAccessToken(config.access_token);
     spotify.setRefreshToken(config.refresh_token);
-    return spotify;
+    spotify.setClientId(config.client_id);
+    spotify.setClientSecret(config.client_secret);
+    return new Promise(function(resolve, reject) {
+        spotify.refreshAccessToken()
+            .then(
+                function(response) {    
+                    spotify.setAccessToken(response.body.access_token);
+                    resolve(spotify);
+                },
+                function(error) {
+                    handle_error(error);
+                    reject(error);
+                },
+            );
+    });
+}
+
+function handle_error(error)
+{
+    console.log(error);
 }

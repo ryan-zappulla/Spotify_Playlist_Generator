@@ -8,11 +8,14 @@ An AWS Lambda Function that will retrieve a users recently listened to music, gr
 To run locally, you will need to add a config.json file with the following schema in the src folder
 
     {   
-	    "access_token" : "",   
+    	"client_id": "",
+    	"client_secret": ""   
 	    "refresh_token": ""
     }
 
-You can get an access and refresh token by following the OAuth2 flow against Spotify using Postman: https://blog.postman.com/generate-spotify-playlists-using-a-postman-collection/
+You can get a client id and secret by creating an app here: https://developer.spotify.com/dashboard/applications
+
+You can get a refresh token by following the OAuth2 flow against Spotify using Postman: https://blog.postman.com/generate-spotify-playlists-using-a-postman-collection/
 * A slight modification to this tutorial is that you will need a token with the following scopes:
 	* playlist-read-private 
 	* playlist-modify-private 
