@@ -11,8 +11,7 @@ export async function handler() {
     spotify
         .getMyRecentlyPlayedTracks(
             { 
-                limit: 50, //This is the limit, I can pass it via pagination if I want
-                type: 'track' 
+                limit: 50 //This is the limit, I can pass it via pagination if I want
             }) 
         .then(
             (response) => {
