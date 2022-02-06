@@ -1,9 +1,8 @@
-import SpotifyWebApi from 'spotify-web-api-node';
-
+import SpotifyWebApi = require("spotify-web-api-node");
 //TODO: Replace this with environment variables for when we are running in the Lambda
 const config = require('./config.json');
 
-export async function handler() {
+export async function handler(): Promise<void> {
     const spotify = await(initialize_spotify());
     spotify
         .getMyRecentlyPlayedTracks(
@@ -45,7 +44,7 @@ async function initialize_spotify(): Promise<SpotifyWebApi>
     });
 }
 
-function handle_error(error)
+function handle_error(error): void
 {
     console.log(error);
 }
