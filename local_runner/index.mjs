@@ -1,3 +1,3 @@
-import {handler} from '../src/index.mjs';
+import {handler} from '../src/index.js';
 
 handler.apply();

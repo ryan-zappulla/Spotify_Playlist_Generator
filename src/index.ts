@@ -1,10 +1,6 @@
-//TODO: Migrate to TypeScript
 import SpotifyWebApi from 'spotify-web-api-node';
 
-//This is required to import a json file in ES6
 //TODO: Replace this with environment variables for when we are running in the Lambda
-import { createRequire } from "module";
-const require = createRequire(import.meta.url);
 const config = require('./config.json');
 
 export async function handler() {
@@ -27,12 +23,13 @@ export async function handler() {
         );
 }
 
-async function initialize_spotify()
+async function initialize_spotify(): Promise<SpotifyWebApi>
 {
     let spotify = new SpotifyWebApi();
     spotify.setRefreshToken(config.refresh_token);
     spotify.setClientId(config.client_id);
     spotify.setClientSecret(config.client_secret);
+
     return new Promise(function(resolve, reject) {
         spotify.refreshAccessToken()
             .then(

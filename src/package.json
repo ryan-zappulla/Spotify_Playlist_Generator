@@ -19,5 +19,9 @@
   "private": "true",
   "dependencies": {
     "spotify-web-api-node": "^5.0.2"
+  },
+  "devDependencies": {
+    "@types/node": "^17.0.15",
+    "@types/spotify-web-api-node": "^5.0.7"
   }
 }
