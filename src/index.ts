@@ -1,12 +1,15 @@
 import SpotifyWebApi = require("spotify-web-api-node");
 import _ = require("underscore");
-import Playlist_Creator = require("./playlist_creator");
+import { Playlist_Creator } from "./playlist_creator";
+import { Error_Handler } from "./error_handler";
 
 //TODO: Replace this with environment variables for when we are running in the Lambda
 const config = require('./config.json');
 
 export async function handler(): Promise<void> {
-    const spotify = await(initialize_spotify());
+    const error_handler = new Error_Handler();
+    const spotify = await(initialize_spotify(error_handler));
+    console.log('entered')
     spotify
         .getMyRecentlyPlayedTracks(
             { 
@@ -14,16 +17,17 @@ export async function handler(): Promise<void> {
             }) 
         .then(
             (response): void => {
-                let playlist_creator = new Playlist_Creator.PlaylistCreator(spotify);//TODO: Look into Nodes naming standards at some point
+                console.log('tracks retrieved')
+                let playlist_creator = new Playlist_Creator(spotify, error_handler);//TODO: Look into Nodes naming standards at some point
                 playlist_creator.create_playlist(response.body.items, `Programmed Playlist - ${new Date().toLocaleString()}`, false);
             },
             (error) => {
-                handle_error(error);
+                error_handler.handle_error(error);
             }
         );
 }
 
-async function initialize_spotify(): Promise<SpotifyWebApi>
+async function initialize_spotify(error_handler : Error_Handler): Promise<SpotifyWebApi>
 {
     let spotify = new SpotifyWebApi();
     spotify.setRefreshToken(config.refresh_token);
@@ -38,7 +42,7 @@ async function initialize_spotify(): Promise<SpotifyWebApi>
                     resolve(spotify);
                 },
                 function(error) {
-                    handle_error(error);
+                    error_handler.handle_error(error);
                     reject(error);
                 },
             );

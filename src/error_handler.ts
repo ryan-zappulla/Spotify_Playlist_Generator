@@ -1,4 +1,9 @@
-function handle_error(error): void
-{
-    console.log(error);
+export class Error_Handler {
+    constructor() { 
+        
+    }
+    handle_error(error): void
+    {
+        console.log(error);
+    }
 }
