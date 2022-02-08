@@ -105,3 +105,8 @@ dist
 src/config.json
 *.js
 *.map
+infrastructure/.terraform/
+infrastructure/.terraform.lock.hcl
+infrastructure/src.zip
+*.tfstate
+*.backup
