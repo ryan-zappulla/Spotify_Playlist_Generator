@@ -2,8 +2,8 @@ export class Error_Handler {
     constructor() { 
         
     }
-    handle_error(error): void
+    handle_error(error: any): void
     {
-        console.log(error);
+        console.error(error);
     }
 }
