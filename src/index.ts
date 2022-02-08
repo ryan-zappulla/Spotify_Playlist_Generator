@@ -1,7 +1,7 @@
 import SpotifyWebApi = require("spotify-web-api-node");
 import _ = require("underscore");
 import { Playlist_Creator } from "./playlist_creator";
-import { Error_Handler } from "./error_handler";
+import { Error_Handler } from "./error_handler"; //TODO: Look into the differences between SpotifyWebApi and these
 
 //TODO: Replace this with environment variables for when we are running in the Lambda
 const config = require('./config.json');
