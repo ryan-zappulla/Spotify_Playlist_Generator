@@ -1,5 +1,6 @@
 import SpotifyWebApi = require("spotify-web-api-node");
 import _ = require("underscore");
+import Playlist_Creator = require("./playlist_creator");
 
 //TODO: Replace this with environment variables for when we are running in the Lambda
 const config = require('./config.json');
@@ -12,28 +13,9 @@ export async function handler(): Promise<void> {
                 limit: 50 //This is the limit, I can get more via pagination if I want
             }) 
         .then(
-            (response) => {
-                let songs = new Set(response.body.items.flatMap(song => `spotify:track:${song.track.id}`)); //Remove duplicates
-                songs.forEach(song => {
-                    console.log(song);
-                });
-                spotify.createPlaylist(`Programmed Playlist - ${new Date().toLocaleString()}`, { 'public': false })
-                .then(
-                    (data) => {
-                        let id = data.body.id;
-                        spotify.addTracksToPlaylist(id, _.shuffle(Array.from(songs)))
-                        .then(
-                            () => {
-                                console.log('Created the playlist!');
-                            }, (error) => {
-                                handle_error(error);
-                            }
-                        );
-                    }, 
-                    (error) => {
-                        handle_error(error)
-                    }
-                );
+            (response): void => {
+                let playlist_creator = new Playlist_Creator.PlaylistCreator(spotify);//TODO: Look into Nodes naming standards at some point
+                playlist_creator.create_playlist(response.body.items, `Programmed Playlist - ${new Date().toLocaleString()}`, false);
             },
             (error) => {
                 handle_error(error);
@@ -61,9 +43,4 @@ async function initialize_spotify(): Promise<SpotifyWebApi>
                 },
             );
     });
-}
-
-function handle_error(error): void
-{
-    console.log(error);
 }
