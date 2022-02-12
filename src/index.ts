@@ -11,7 +11,7 @@ class PlaylistCreateEvent {
 }
 
 export async function handler(event : PlaylistCreateEvent): Promise<void> {
-    let playlistName = event?.PlaylistName?.trim() ? `Programmed Playlist - ${new Date().toLocaleString()}` : event.PlaylistName;
+    let playlistName = event?.PlaylistName?.trim() ? event.PlaylistName : `Programmed Playlist - ${new Date().toLocaleString()}`;
     const error_handler = new Error_Handler();
 
     try {
