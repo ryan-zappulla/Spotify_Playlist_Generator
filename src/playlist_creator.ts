@@ -16,7 +16,7 @@ export class Playlist_Creator {
         let songs = new Set(items.flatMap(song => `spotify:track:${song.track.id}`)); //Remove duplicates
         this.spotify.createPlaylist(name, { 'public': isPublic });
     
-        return new Promise(function(resolve, reject) {
+        return new Promise((resolve, reject) => {
             this.spotify.createPlaylist(name, { 'public': isPublic })
                 .then(
                     (data) => {
