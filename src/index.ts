@@ -11,7 +11,9 @@ class PlaylistCreateEvent {
 }
 
 export async function handler(event : PlaylistCreateEvent): Promise<void> {
+    let playlistName = event?.PlaylistName?.trim() ? `Programmed Playlist - ${new Date().toLocaleString()}` : event.PlaylistName;
     const error_handler = new Error_Handler();
+
     try {
         const spotify = await initialize_spotify();
         let recentSongs = await spotify.getMyRecentlyPlayedTracks(
@@ -20,7 +22,7 @@ export async function handler(event : PlaylistCreateEvent): Promise<void> {
             });
         let playlist_creator = new Playlist_Creator(spotify);
         let songs = new Set(recentSongs.body.items.flatMap(song => `spotify:track:${song.track.id}`)); //Remove duplicates
-        await playlist_creator.create_playlist(Array.from(songs), event.PlaylistName, false);
+        await playlist_creator.create_playlist(Array.from(songs), playlistName, false);
     }
     catch (error) {
         error_handler.handle_error(error);
