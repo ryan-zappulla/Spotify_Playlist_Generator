@@ -1,5 +1,4 @@
 import SpotifyWebApi = require("spotify-web-api-node");
-import { APIGatewayProxyEvent } from "aws-lambda";
 import _ = require("underscore");
 import { Playlist_Creator } from "./playlist_creator";
 import { Error_Handler } from "./error_handler"; //TODO: Look into the differences between SpotifyWebApi and these
