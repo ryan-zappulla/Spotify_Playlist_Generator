@@ -7,8 +7,11 @@ import { Error_Handler } from "./error_handler"; //TODO: Look into the differenc
 //TODO: Replace this with environment variables for when we are running in the Lambda
 const config = require('./config.json');
 
-export async function handler(event : APIGatewayProxyEvent): Promise<void> {
-    console.log("EVENT: \n" + JSON.stringify(event, null, 2))
+class PlaylistCreateEvent {
+    PlaylistName: string
+}
+
+export async function handler(event : PlaylistCreateEvent): Promise<void> {
     const error_handler = new Error_Handler();
     try {
         const spotify = await initialize_spotify();
@@ -18,7 +21,7 @@ export async function handler(event : APIGatewayProxyEvent): Promise<void> {
             });
         let playlist_creator = new Playlist_Creator(spotify);
         let songs = new Set(recentSongs.body.items.flatMap(song => `spotify:track:${song.track.id}`)); //Remove duplicates
-        await playlist_creator.create_playlist(Array.from(songs), `Programmed Playlist - ${new Date().toLocaleString()}`, false);
+        await playlist_creator.create_playlist(Array.from(songs), event.PlaylistName, false);
     }
     catch (error) {
         error_handler.handle_error(error);

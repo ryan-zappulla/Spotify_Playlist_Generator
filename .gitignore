@@ -110,3 +110,4 @@ infrastructure/.terraform.lock.hcl
 infrastructure/src.zip
 *.tfstate
 *.backup
+src/src.zip
