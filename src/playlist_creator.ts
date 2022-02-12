@@ -9,10 +9,9 @@ export class Playlist_Creator {
         this.spotify = spotify;
     }
 
-    async create_playlist(items: SpotifyApi.PlayHistoryObject[], name: string, isPublic: boolean) : Promise<void>
+    async create_playlist(songs: string[], name: string, isPublic: boolean) : Promise<void>
     {
-        let songs = new Set(items.flatMap(song => `spotify:track:${song.track.id}`)); //Remove duplicates
         let data = await this.spotify.createPlaylist(name, { 'public': isPublic });
-        await this.spotify.addTracksToPlaylist(data.body.id, _.shuffle(Array.from(songs)));
+        await this.spotify.addTracksToPlaylist(data.body.id, _.shuffle(songs));
     }
 }
