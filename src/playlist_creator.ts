@@ -1,6 +1,5 @@
 import SpotifyWebApi = require("spotify-web-api-node");
 import _ = require("underscore");
-import { Error_Handler } from "./error_handler";
 
 export class Playlist_Creator {
     private spotify: SpotifyWebApi;

@@ -1,4 +1,5 @@
 import SpotifyWebApi = require("spotify-web-api-node");
+import { APIGatewayProxyEvent } from "aws-lambda";
 import _ = require("underscore");
 import { Playlist_Creator } from "./playlist_creator";
 import { Error_Handler } from "./error_handler"; //TODO: Look into the differences between SpotifyWebApi and these
@@ -6,7 +7,8 @@ import { Error_Handler } from "./error_handler"; //TODO: Look into the differenc
 //TODO: Replace this with environment variables for when we are running in the Lambda
 const config = require('./config.json');
 
-export async function handler(): Promise<void> {
+export async function handler(event : APIGatewayProxyEvent): Promise<void> {
+    console.log("EVENT: \n" + JSON.stringify(event, null, 2))
     const error_handler = new Error_Handler();
     try {
         const spotify = await initialize_spotify();
