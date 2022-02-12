@@ -14,7 +14,7 @@ export async function handler(): Promise<void> {
             { 
                 limit: 50 //This is the limit, I can get more via pagination if I want
             });
-        let playlist_creator = new Playlist_Creator(spotify, error_handler);
+        let playlist_creator = new Playlist_Creator(spotify);
         await playlist_creator.create_playlist(recentSongs.body.items, `Programmed Playlist - ${new Date().toLocaleString()}`, false);
     }
     catch (error) {

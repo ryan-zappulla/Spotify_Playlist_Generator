@@ -4,37 +4,15 @@ import { Error_Handler } from "./error_handler";
 
 export class Playlist_Creator {
     private spotify: SpotifyWebApi;
-    private error_handler: Error_Handler;
 
-    constructor(spotify: SpotifyWebApi, error_handler : Error_Handler) {
+    constructor(spotify: SpotifyWebApi) {
         this.spotify = spotify;
-        this.error_handler = error_handler;
     }
 
     async create_playlist(items: SpotifyApi.PlayHistoryObject[], name: string, isPublic: boolean) : Promise<void>
     {
         let songs = new Set(items.flatMap(song => `spotify:track:${song.track.id}`)); //Remove duplicates
-    
-        return new Promise((resolve, reject) => {
-            this.spotify.createPlaylist(name, { 'public': isPublic })
-                .then(
-                    (data) => {
-                        let id = data.body.id;
-                        this.spotify.addTracksToPlaylist(id, _.shuffle(Array.from(songs)))
-                            .then(
-                                () => {
-                                    console.log('Created the playlist!');
-                                    resolve();
-                                }, (error) => {
-                                    this.error_handler.handle_error(error);
-                                    reject(error);
-                                }
-                            );
-                    },
-                    (error) => {
-                        reject(error);
-                    }
-                );
-        });
+        let data = await this.spotify.createPlaylist(name, { 'public': isPublic });
+        await this.spotify.addTracksToPlaylist(data.body.id, _.shuffle(Array.from(songs)));
     }
 }
