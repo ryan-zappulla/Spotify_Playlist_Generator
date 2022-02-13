@@ -1,6 +1,7 @@
 import SpotifyWebApi = require("spotify-web-api-node");
 import _ = require("underscore");
 import { Playlist_Creator } from "./playlist_creator";
+import { Song_Provider } from "./song_provider";
 import { Error_Handler } from "./error_handler"; //TODO: Look into the differences between SpotifyWebApi and these
 
 //TODO: Replace this with environment variables for when we are running in the Lambda
@@ -16,12 +17,12 @@ export async function handler(event : PlaylistCreateEvent): Promise<void> {
 
     try {
         const spotify = await initialize_spotify();
-        let recentSongs = await spotify.getMyRecentlyPlayedTracks(
-            { 
-                limit: 50 //This is the limit, I can get more via pagination if I want
-            });
+        let song_provider = new Song_Provider(spotify);
+        let recentSongs = await song_provider.get_recently_played_songs(50);
         let playlist_creator = new Playlist_Creator(spotify);
-        let songs = new Set(recentSongs.body.items.flatMap(song => `spotify:track:${song.track.id}`)); //Remove duplicates
+        let songs = new Set(
+                recentSongs.flatMap(song => `spotify:track:${song.track.id}`) //spotify song ids need to be prefixed with spotify:track:
+            ); //Remove duplicates
         await playlist_creator.create_playlist(Array.from(songs), playlistName, false);
     }
     catch (error) {
