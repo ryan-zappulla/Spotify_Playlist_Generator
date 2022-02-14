@@ -8,9 +8,9 @@ An AWS Lambda Function that will retrieve a users recently listened to music, gr
 To run locally, you will need to add a config.json file with the following schema in the src folder
 
     {   
-    	"client_id": "",
-    	"client_secret": ""   
-	    "refresh_token": ""
+		"client_id": "",
+		"client_secret": ""   
+		"refresh_token": ""
     }
 
 You can get a client id and secret by creating an app here: https://developer.spotify.com/dashboard/applications
