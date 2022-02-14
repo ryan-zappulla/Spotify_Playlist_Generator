@@ -12,4 +12,3 @@ variable "song_play_log_dynamo_name" {
   type        = string
   description = "Name of the Dynamo used to store recently played songs"
 }
-
