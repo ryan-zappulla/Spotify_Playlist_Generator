@@ -20,10 +20,12 @@ resource "aws_iam_role_policy_attachment" "lambda_basic_policy" {
 }
 
 resource "aws_lambda_function" "lambda" {
-  filename      = "src.zip"
-  function_name = var.playlist_creator_lambda_name
-  role          = aws_iam_role.lambda.arn
-  handler       = "index.handler"
-  source_code_hash = filebase64sha256("src.zip")//TODO: Get a Code Pipeline in place
-  runtime = "nodejs12.x"
+  filename          = "src.zip"
+  function_name     = var.playlist_creator_lambda_name
+  role              = aws_iam_role.lambda.arn
+  handler           = "index.handler"
+  source_code_hash  = filebase64sha256("src.zip")//TODO: Get a Code Pipeline in place
+  runtime           = "nodejs12.x"
+  memory_size       = 128
+  timeout           = 60  
 }
