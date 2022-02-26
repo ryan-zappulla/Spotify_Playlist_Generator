@@ -24,6 +24,7 @@ export async function lambda_handler() : Promise<void> {
 
 export async function handler(dependencies : Dependencies): Promise<void> {
     //Get Songs
+    let recentSongs = await dependencies.song_provider.get_recently_played_songs();
     //Get most recent song from Dynamo
     //Filter out songs older than that most recent song
     //Save to Dynamo

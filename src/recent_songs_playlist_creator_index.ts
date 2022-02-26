@@ -33,7 +33,7 @@ export async function lambda_handler(event : PlaylistCreateEvent) : Promise<void
 export async function handler(event : PlaylistCreateEvent, dependencies : Dependencies): Promise<void> {
     let playlistName = event?.PlaylistName?.trim() ? event.PlaylistName : `Programmed Playlist - ${new Date().toLocaleString()}`;
     try {
-        let recentSongs = await dependencies.song_provider.get_recently_played_songs(50);
+        let recentSongs = await dependencies.song_provider.get_recently_played_songs();
         let songs = new Set(
                 recentSongs.flatMap(song => `spotify:track:${song.track.id}`) //spotify song ids need to be prefixed with spotify:track:
             ); //Remove duplicates
