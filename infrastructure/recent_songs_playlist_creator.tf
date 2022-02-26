@@ -27,5 +27,12 @@ resource "aws_lambda_function" "lambda" {
   source_code_hash  = filebase64sha256("src.zip")//TODO: Get a Code Pipeline in place
   runtime           = "nodejs12.x"
   memory_size       = 128
-  timeout           = 60  
+  timeout           = 60
+  environment {
+    variables = {
+      client_id = var.spotify_client_id
+      client_secret = var.spotify_client_secret
+      refresh_token = var.refresh_token
+    }
+  }
 }
