@@ -26,14 +26,10 @@ export async function lambda_handler() : Promise<void> {
 }
 
 export async function handler(dependencies : Dependencies): Promise<void> {
-    //Get Songs
     let recentSongs = await dependencies.song_provider.get_recently_played_songs();
-    //Get most recent song from Dynamo
     let mostRecentSave = await dependencies.cache_facade.most_recent_play_timestamp();
-    //Filter out songs older than that most recent song
     let songsSinceLastSave = recentSongs.filter(x => x.played_at > mostRecentSave);
-    songsSinceLastSave.forEach(song => {
-        console.log(song.track.name);
+    songsSinceLastSave.forEach(async song => {
+        await dependencies.cache_facade.save_song_to_cache(song);
     });
-    //Save to Dynamo
 }
