@@ -1,7 +1,11 @@
 import SpotifyWebApi = require("spotify-web-api-node");
 import _ = require("underscore");
 
-export class Playlist_Creator {
+export interface Playlist_Creator {
+    create_playlist(songs: string[], name: string, isPublic: boolean) : Promise<void>
+}
+
+export class Spotify_Playlist_Creator {
     private spotify: SpotifyWebApi;
 
     constructor(spotify: SpotifyWebApi) {
