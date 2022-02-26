@@ -15,6 +15,6 @@ export class Spotify_Playlist_Creator {
     async create_playlist(songs: string[], name: string, isPublic: boolean) : Promise<void>
     {
         let data = await this.spotify.createPlaylist(name, { 'public': isPublic });
-        await this.spotify.addTracksToPlaylist(data.body.id, _.shuffle(songs));
+        await this.spotify.addTracksToPlaylist(data.body.id, songs);
     }
 }

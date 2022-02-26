@@ -1,7 +1,7 @@
 import _ = require("underscore");
 import { Playlist_Creator, Spotify_Playlist_Creator } from "./playlist_creator";
 import { Song_Provider, Spotify_Song_Provider } from "./song_provider";
-import { Error_Handler } from "./error_handler"; //TODO: Look into the differences between SpotifyWebApi and these
+import { Error_Handler } from "./error_handler";
 import { create_spotify } from "./spotify_factory";
 
 class PlaylistCreateEvent {
@@ -37,7 +37,7 @@ export async function handler(event : PlaylistCreateEvent, dependencies : Depend
         let songs = new Set(
                 recentSongs.flatMap(song => `spotify:track:${song.track.id}`) //spotify song ids need to be prefixed with spotify:track:
             ); //Remove duplicates
-        await dependencies.playlist_creator.create_playlist(Array.from(songs), playlistName, false);
+        await dependencies.playlist_creator.create_playlist(_.shuffle(Array.from(songs)), playlistName, false);
     }
     catch (error) {
         dependencies.error_handler.handle_error(error);
