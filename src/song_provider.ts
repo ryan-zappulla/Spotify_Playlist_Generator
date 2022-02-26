@@ -1,6 +1,10 @@
 import SpotifyWebApi = require("spotify-web-api-node");
 
-export class Song_Provider {
+export interface Song_Provider {
+    get_recently_played_songs(count: number) : Promise<SpotifyApi.PlayHistoryObject[]>
+}
+
+export class Spotify_Song_Provider implements Song_Provider {
     private spotify: SpotifyWebApi;
 
     constructor(spotify: SpotifyWebApi) {

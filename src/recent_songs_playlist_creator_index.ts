@@ -1,6 +1,6 @@
 import _ = require("underscore");
 import { Playlist_Creator } from "./playlist_creator";
-import { Song_Provider } from "./song_provider";
+import { Song_Provider, Spotify_Song_Provider } from "./song_provider";
 import { Error_Handler } from "./error_handler"; //TODO: Look into the differences between SpotifyWebApi and these
 import { create_spotify } from "./spotify_factory";
 
@@ -23,7 +23,7 @@ export async function lambda_handler(event : PlaylistCreateEvent) : Promise<void
     try {
         const spotify = await create_spotify(config.client_id, config.client_secret, config.refresh_token);
         dependencies.playlist_creator = new Playlist_Creator(spotify);
-        dependencies.song_provider = new Song_Provider(spotify);
+        dependencies.song_provider = new Spotify_Song_Provider(spotify);
     }
     catch (error) {
         dependencies.error_handler.handle_error(error);
