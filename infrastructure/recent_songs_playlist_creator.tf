@@ -12,11 +12,21 @@ data "aws_iam_policy_document" "trust_policy" {
 resource "aws_iam_role" "lambda" {
   name               = var.playlist_creator_lambda_name
   assume_role_policy = "${data.aws_iam_policy_document.trust_policy.json}"
+  inline_policy {
+    name        = var.playlist_creator_lambda_name
+    policy      = data.aws_iam_policy_document.lambda_permissions.json
+  }
 }
 
-resource "aws_iam_role_policy_attachment" "lambda_basic_policy" {
-  role       = "${aws_iam_role.lambda.name}"
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"//TODO: Replace this with a more precise role
+data "aws_iam_policy_document" "lambda_permissions" {
+  statement {
+    actions   = [
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents"
+              ]
+    resources = ["*"]
+  }
 }
 
 resource "aws_lambda_function" "lambda" {
