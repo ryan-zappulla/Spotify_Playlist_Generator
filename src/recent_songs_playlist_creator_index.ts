@@ -4,11 +4,11 @@ import { Song_Provider, Spotify_Song_Provider } from "./song_provider";
 import { Error_Handler } from "./error_handler";
 import { create_spotify } from "./spotify_factory";
 
-class PlaylistCreateEvent {
+export class PlaylistCreateEvent {
     PlaylistName: string
 }
 
-class Dependencies {
+export class Dependencies {
     error_handler : Error_Handler
     song_provider : Song_Provider
     playlist_creator : Playlist_Creator
