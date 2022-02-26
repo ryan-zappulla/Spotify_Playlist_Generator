@@ -1,3 +1,3 @@
-import {handler} from '../src/index.js';
+import {handler} from '../src/recent_songs_playlist_creator.js';
 
 handler.apply();
