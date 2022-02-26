@@ -1,8 +1,8 @@
-import SpotifyWebApi = require("spotify-web-api-node");
 import _ = require("underscore");
 import { Playlist_Creator } from "./playlist_creator";
 import { Song_Provider } from "./song_provider";
 import { Error_Handler } from "./error_handler"; //TODO: Look into the differences between SpotifyWebApi and these
+import { create_spotify } from "./spotify_factory";
 
 //TODO: Replace this with environment variables for when we are running in the Lambda
 const config = require('./config.json');
@@ -16,7 +16,7 @@ export async function handler(event : PlaylistCreateEvent): Promise<void> {
     const error_handler = new Error_Handler();
 
     try {
-        const spotify = await initialize_spotify();
+        const spotify = await create_spotify(config.client_id, config.client_secret, config.refresh_token);
         let song_provider = new Song_Provider(spotify);
         let recentSongs = await song_provider.get_recently_played_songs(50);
         let playlist_creator = new Playlist_Creator(spotify);
@@ -28,14 +28,4 @@ export async function handler(event : PlaylistCreateEvent): Promise<void> {
     catch (error) {
         error_handler.handle_error(error);
     }
-}
-
-async function initialize_spotify(): Promise<SpotifyWebApi> {
-    let spotify = new SpotifyWebApi();
-    spotify.setRefreshToken(config.refresh_token);
-    spotify.setClientId(config.client_id);
-    spotify.setClientSecret(config.client_secret);
-    let refreshResponse = await spotify.refreshAccessToken();
-    await spotify.setAccessToken(refreshResponse.body.access_token);
-    return spotify;
 }
