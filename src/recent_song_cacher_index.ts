@@ -26,6 +26,8 @@ export async function handler(dependencies : Dependencies): Promise<void> {
     //Get Songs
     let recentSongs = await dependencies.song_provider.get_recently_played_songs();
     //Get most recent song from Dynamo
+    let mostRecentSave = "2022-02-26T22:45:33.475Z"; //TODO: Do the thing
     //Filter out songs older than that most recent song
+    let songsSinceLastSave = recentSongs.filter(x => x.played_at > mostRecentSave);
     //Save to Dynamo
 }
