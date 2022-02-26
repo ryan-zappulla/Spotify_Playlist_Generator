@@ -32,7 +32,7 @@ resource "aws_lambda_function" "lambda" {
     variables = {
       client_id = var.spotify_client_id
       client_secret = var.spotify_client_secret
-      refresh_token = var.refresh_token
+      refresh_token = var.spotify_refresh_token
     }
   }
 }
