@@ -8,6 +8,11 @@ variable "playlist_creator_lambda_name" {
   description = "Name of the Lambda function used to create playlists"
 }
 
+variable "recent_song_logger_lambda_name" {
+  type        = string
+  description = "Name of the Lambda function used to log recently played songs to dynamo"
+}
+
 variable "song_play_log_dynamo_name" {
   type        = string
   description = "Name of the Dynamo used to store recently played songs"

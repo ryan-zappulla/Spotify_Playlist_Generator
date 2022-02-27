@@ -1,6 +1,6 @@
 import { createRequire } from "module";
 import { NoopSongLogFacade } from "../src/compiled/song_log_facade.js";
-import { handler, Dependencies } from '../src/compiled/recent_song_cacher_index.js';
+import { handler, Dependencies } from '../src/compiled/recent_song_logger_index.js';
 import { Spotify_Song_Provider } from '../src/compiled/song_provider.js';
 import { create_spotify } from "../src/compiled/spotify_factory.js";
 const require = createRequire(import.meta.url);
