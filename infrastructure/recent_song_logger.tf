@@ -28,7 +28,10 @@ data "aws_iam_policy_document" "song_logger_lambda_permissions" {
     resources = ["*"]
   }
   statement {
-    actions = [ "dynamodb:PutItem" ]
+    actions = [ 
+              "dynamodb:PutItem",
+              "dynamodb:Query"
+            ]
     resources = [aws_dynamodb_table.song_log.arn]
   }
 }
