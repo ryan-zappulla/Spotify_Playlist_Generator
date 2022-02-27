@@ -26,9 +26,12 @@ export class DynamoSongLogFacade implements SongLogFacade {
               'song_name': {S: song.track.name}
             }
           };
-        await this.client.put(document);
-        return new Promise<void>((resolve) => {
-            resolve();
+        this.client.put(document, function(err, data) {
+            if (err) {
+                console.log("Error", err);
+            } else {
+                console.log("Success", data);
+            }
         });
     }
     most_recent_play_timestamp(): Promise<string> {
