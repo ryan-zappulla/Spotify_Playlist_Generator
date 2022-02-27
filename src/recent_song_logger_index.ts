@@ -2,7 +2,7 @@ import _ = require("underscore");
 import { Song_Provider, Spotify_Song_Provider } from "./song_provider";
 import { Error_Handler } from "./error_handler";
 import { create_spotify } from "./spotify_factory";
-import { SongLogFacade, DynamoSongLogFacade } from "./song_log_facade";
+import { SongLogFacade, DynamoSongLogFacade, NoopSongLogFacade } from "./song_log_facade";
 
 export class Dependencies {
     error_handler : Error_Handler
@@ -21,7 +21,7 @@ export async function lambda_handler() : Promise<void> {
     catch (error) {
         dependencies.error_handler.handle_error(error);
     }
-    dependencies.song_log_facade = new DynamoSongLogFacade();
+    dependencies.song_log_facade = new NoopSongLogFacade("2022-02-26T22:45:33.475Z");
     await handler(dependencies);
 }
 
