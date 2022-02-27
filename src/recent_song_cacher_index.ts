@@ -2,12 +2,12 @@ import _ = require("underscore");
 import { Song_Provider, Spotify_Song_Provider } from "./song_provider";
 import { Error_Handler } from "./error_handler";
 import { create_spotify } from "./spotify_factory";
-import { CacheFacade, DynamoCacheFacade } from "./cache_facade";
+import { SongLogFacade, DynamoSongLogFacade } from "./song_log_facade";
 
 export class Dependencies {
     error_handler : Error_Handler
     song_provider : Song_Provider
-    cache_facade  : CacheFacade
+    song_log_facade  : SongLogFacade
 }
 
 //This handler is used as the lambda entry point and generates dependencies to be passed into handler
@@ -21,15 +21,15 @@ export async function lambda_handler() : Promise<void> {
     catch (error) {
         dependencies.error_handler.handle_error(error);
     }
-    dependencies.cache_facade = new DynamoCacheFacade();
+    dependencies.song_log_facade = new DynamoSongLogFacade();
     await handler(dependencies);
 }
 
 export async function handler(dependencies : Dependencies): Promise<void> {
     let recentSongs = await dependencies.song_provider.get_recently_played_songs();
-    let mostRecentSave = await dependencies.cache_facade.most_recent_play_timestamp();
+    let mostRecentSave = await dependencies.song_log_facade.most_recent_play_timestamp();
     let songsSinceLastSave = recentSongs.filter(x => x.played_at > mostRecentSave);
     songsSinceLastSave.forEach(async song => {
-        await dependencies.cache_facade.save_song_to_cache(song);
+        await dependencies.song_log_facade.log_song_play(song);
     });
 }
