@@ -44,9 +44,10 @@ resource "aws_lambda_function" "song_logger_lambda" {
   timeout           = 60
   environment {
     variables = {
-      client_id = var.spotify_client_id
-      client_secret = var.spotify_client_secret
-      refresh_token = var.spotify_refresh_token
+      client_id         = var.spotify_client_id
+      client_secret     = var.spotify_client_secret
+      refresh_token     = var.spotify_refresh_token
+      dynamo_log_name   = aws_dynamodb_table.song_log.name
     }
   }
 }
