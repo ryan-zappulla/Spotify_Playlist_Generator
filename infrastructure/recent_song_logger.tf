@@ -54,3 +54,21 @@ resource "aws_lambda_function" "song_logger_lambda" {
     }
   }
 }
+
+resource "aws_cloudwatch_event_rule" "song_logger_lambda_cron_trigger" {
+    name = "${var.recent_song_logger_lambda_name}_cron_trigger"
+    schedule_expression = "rate(20 minutes)"
+}
+
+resource "aws_cloudwatch_event_target" "song_logger_lambda_cron_target" {
+    rule = "${aws_cloudwatch_event_rule.song_logger_lambda_cron_trigger.name}"
+    arn = "${aws_lambda_function.song_logger_lambda.arn}"
+}
+
+resource "aws_lambda_permission" "song_logger_lambda_cron_trigger_permission" {
+    statement_id = "AllowExecutionFromCloudWatch"
+    action = "lambda:InvokeFunction"
+    function_name = "${aws_lambda_function.song_logger_lambda.function_name}"
+    principal = "events.amazonaws.com"
+    source_arn = "${aws_cloudwatch_event_rule.song_logger_lambda_cron_trigger.arn}"
+}
