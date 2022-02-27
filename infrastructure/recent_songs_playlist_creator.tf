@@ -33,7 +33,7 @@ resource "aws_lambda_function" "lambda" {
   filename          = "playlist_creator.zip"//TODO: Get a Code Pipeline in place
   function_name     = var.playlist_creator_lambda_name
   role              = aws_iam_role.lambda.arn
-  handler           = "recent_songs_playlist_creator_index.lambda_handler"
+  handler           = "compiled/recent_songs_playlist_creator_index.lambda_handler"
   source_code_hash  = filebase64sha256("playlist_creator.zip")
   runtime           = "nodejs12.x"
   memory_size       = 128
