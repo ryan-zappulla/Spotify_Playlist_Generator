@@ -21,7 +21,9 @@ export async function lambda_handler() : Promise<void> {
     catch (error) {
         dependencies.error_handler.handle_error(error);
     }
-    dependencies.song_log_facade = new NoopSongLogFacade("2022-02-26T22:45:33.475Z");
+    //TODO: Pull table name from env variable
+    //TODO: Get user id from spotify sdk
+    dependencies.song_log_facade = new DynamoSongLogFacade("song_play_log", "1");
     await handler(dependencies);
 }
 

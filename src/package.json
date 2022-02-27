@@ -18,6 +18,7 @@
   "description": "",
   "private": "true",
   "dependencies": {
+    "aws-sdk": "^2.1082.0",
     "spotify-web-api-node": "^5.0.2",
     "underscore": "^1.13.2"
   },

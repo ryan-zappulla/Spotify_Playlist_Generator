@@ -1,4 +1,5 @@
 require("spotify-web-api-node");
+import { DynamoDB } from "aws-sdk";
 
 export interface SongLogFacade {
     most_recent_play_timestamp() : Promise<string>;
@@ -6,11 +7,34 @@ export interface SongLogFacade {
 }
 
 export class DynamoSongLogFacade implements SongLogFacade {
-    log_song_play(song: SpotifyApi.PlayHistoryObject): Promise<void> {
-        throw new Error("Method not implemented.");
+    private client: DynamoDB.DocumentClient;
+    private table_name: string;
+    private user_id: string;
+
+    constructor (table_name: string, user_id: string) {
+        this.client = new DynamoDB.DocumentClient();
+        this.user_id = user_id;
+        this.table_name = table_name;
+    }
+
+    async log_song_play(song: SpotifyApi.PlayHistoryObject): Promise<void> {
+        var document = {
+            TableName: this.table_name,
+            Item: {
+              'user_id' : {S: this.user_id},
+              'time_played_utc' : {S: song.played_at},
+              'song_name': {S: song.track.name}
+            }
+          };
+        await this.client.put(document);
+        return new Promise<void>((resolve) => {
+            resolve();
+        });
     }
     most_recent_play_timestamp(): Promise<string> {
-        throw new Error("Method not implemented.");
+        return new Promise<string>((resolve) => {
+            resolve("");
+        });
     }
 }
 
