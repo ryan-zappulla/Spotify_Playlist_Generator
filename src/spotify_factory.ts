@@ -1,5 +1,4 @@
 import SpotifyWebApi = require("spotify-web-api-node");
-const config = require('./config.json');
 
 export async function create_spotify(client_id: string, client_secret: string, refresh_token: string): Promise<SpotifyWebApi> {
     let spotify = new SpotifyWebApi();

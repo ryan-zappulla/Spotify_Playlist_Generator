@@ -1,4 +1,4 @@
-resource "aws_dynamodb_table" "dynamo" {
+resource "aws_dynamodb_table" "song_log" {
     name            = var.song_play_log_dynamo_name
     hash_key        = "user_id"
     range_key       = "time_played_utc"

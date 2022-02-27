@@ -4,11 +4,11 @@ import { Song_Provider, Spotify_Song_Provider } from "./song_provider";
 import { Error_Handler } from "./error_handler";
 import { create_spotify } from "./spotify_factory";
 
-class PlaylistCreateEvent {
+export class PlaylistCreateEvent {
     PlaylistName: string
 }
 
-class Dependencies {
+export class Dependencies {
     error_handler : Error_Handler
     song_provider : Song_Provider
     playlist_creator : Playlist_Creator
@@ -33,7 +33,7 @@ export async function lambda_handler(event : PlaylistCreateEvent) : Promise<void
 export async function handler(event : PlaylistCreateEvent, dependencies : Dependencies): Promise<void> {
     let playlistName = event?.PlaylistName?.trim() ? event.PlaylistName : `Programmed Playlist - ${new Date().toLocaleString()}`;
     try {
-        let recentSongs = await dependencies.song_provider.get_recently_played_songs(50);
+        let recentSongs = await dependencies.song_provider.get_recently_played_songs();
         let songs = new Set(
                 recentSongs.flatMap(song => `spotify:track:${song.track.id}`) //spotify song ids need to be prefixed with spotify:track:
             ); //Remove duplicates
