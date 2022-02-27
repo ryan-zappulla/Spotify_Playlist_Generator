@@ -43,9 +43,18 @@ export class DynamoSongLogFacade implements SongLogFacade {
             },
             ScanIndexForward: false //This tells the query to return the latest key first
         }
-        let response = await this.client.send(new QueryCommand(input));
+        let latest = await this.client.send(new QueryCommand(input));
+        let response: string;
+        if(latest.Count > 0)
+        {
+            response = latest.Items[0]["time_played_utc"].S
+        }
+        else
+        {
+            response = "";
+        }
         return new Promise<string>((resolve) => {
-            resolve(response.Items[0]["time_played_utc"].S);
+            resolve(response);
         });
     }
 }
