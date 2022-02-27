@@ -24,7 +24,8 @@ export class DynamoSongLogFacade implements SongLogFacade {
             Item: marshall({
                 'user_id' : this.user_id,
                 'time_played_utc' : song.played_at,
-                'song_name': song.track.name
+                'song_name': song.track.name,
+                'song_id': song.track.id
               })
         };
         await this.client.send(new PutItemCommand(input));
