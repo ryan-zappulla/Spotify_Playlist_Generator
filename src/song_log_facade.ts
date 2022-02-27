@@ -1,5 +1,6 @@
 require("spotify-web-api-node");
-import { DynamoDB } from "aws-sdk";
+import { DynamoDBClient, PutItemCommand, PutItemCommandInput } from "@aws-sdk/client-dynamodb";
+import { marshall } from "@aws-sdk/util-dynamodb";
 
 export interface SongLogFacade {
     most_recent_play_timestamp() : Promise<string>;
@@ -7,33 +8,29 @@ export interface SongLogFacade {
 }
 
 export class DynamoSongLogFacade implements SongLogFacade {
-    private client: DynamoDB.DocumentClient;
+    private client: DynamoDBClient;
     private table_name: string;
     private user_id: string;
 
     constructor (table_name: string, user_id: string) {
-        this.client = new DynamoDB.DocumentClient();
+        this.client = new DynamoDBClient({});
         this.user_id = user_id;
         this.table_name = table_name;
     }
 
     async log_song_play(song: SpotifyApi.PlayHistoryObject): Promise<void> {
-        var document = {
+        console.log(`log entered: ${song.track.name}`);
+        const input: PutItemCommandInput = {
             TableName: this.table_name,
-            Item: {
-              'user_id' : {S: this.user_id},
-              'time_played_utc' : {S: song.played_at},
-              'song_name': {S: song.track.name}
-            }
-          };
-        this.client.put(document, function(err, data) {
-            if (err) {
-                console.log("Error", err);
-            } else {
-                console.log("Success", data);
-            }
-        });
+            Item: marshall({
+                'user_id' : this.user_id,
+                'time_played_utc' : song.played_at,
+                'song_name': song.track.name
+              })
+        };
+        await this.client.send(new PutItemCommand(input));
     }
+
     most_recent_play_timestamp(): Promise<string> {
         return new Promise<string>((resolve) => {
             resolve("");
