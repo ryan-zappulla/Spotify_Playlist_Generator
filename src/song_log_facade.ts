@@ -1,5 +1,5 @@
 require("spotify-web-api-node");
-import { DynamoDBClient, PutItemCommand, PutItemCommandInput } from "@aws-sdk/client-dynamodb";
+import { DynamoDBClient, QueryCommandInput, PutItemCommand, PutItemCommandInput, QueryCommand } from "@aws-sdk/client-dynamodb";
 import { marshall } from "@aws-sdk/util-dynamodb";
 
 export interface SongLogFacade {
@@ -30,9 +30,17 @@ export class DynamoSongLogFacade implements SongLogFacade {
         await this.client.send(new PutItemCommand(input));
     }
 
-    most_recent_play_timestamp(): Promise<string> {
+    async most_recent_play_timestamp(): Promise<string> {
+        const input: QueryCommandInput = {
+            TableName: this.table_name,
+            AttributesToGet: ["time_played_utc"],
+            Limit: 1,
+            KeyConditionExpression: `user_id = ${this.user_id}`,
+            ScanIndexForward: false //This tells the query to return the latest key first
+        }
+        let response = await this.client.send(new QueryCommand(input));
         return new Promise<string>((resolve) => {
-            resolve("");
+            resolve(response.Items[0]["time_played_utc"].S);
         });
     }
 }
