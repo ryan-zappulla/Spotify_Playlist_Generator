@@ -19,7 +19,6 @@ export class DynamoSongLogFacade implements SongLogFacade {
     }
 
     async log_song_play(song: SpotifyApi.PlayHistoryObject): Promise<void> {
-        console.log(`log entered: ${song.track.name}`);
         const input: PutItemCommandInput = {
             TableName: this.table_name,
             Item: marshall({
