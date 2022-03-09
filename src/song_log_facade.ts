@@ -22,10 +22,10 @@ export class DynamoSongLogFacade implements SongLogFacade {
         const input: PutItemCommandInput = {
             TableName: this.table_name,
             Item: marshall({
-                'user_id' : this.user_id,
-                'time_played_utc' : song.played_at,
-                'song_name': song.track.name,
-                'song_id': song.track.id
+                "user_id" : this.user_id,
+                "time_played_utc" : song.played_at,
+                "song_name": song.track.name,
+                "song_id": song.track.id
               })
         };
         await this.client.send(new PutItemCommand(input));
@@ -35,7 +35,7 @@ export class DynamoSongLogFacade implements SongLogFacade {
         const input: QueryCommandInput = {
             TableName: this.table_name,
             Limit: 1,
-            KeyConditionExpression: 'user_id = :u',
+            KeyConditionExpression: "user_id = :u",
             ExpressionAttributeValues: {
                 ":u": {
                     S: this.user_id
