@@ -111,3 +111,4 @@ infrastructure/src.zip
 *.tfstate
 *.backup
 *.zip
+local_runner/config.json
