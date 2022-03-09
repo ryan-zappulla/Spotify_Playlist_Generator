@@ -5,7 +5,7 @@ An AWS Lambda Function that will retrieve a users recently listened to music, gr
 
 ### config.json
 
-To run locally, you will need to add a config.json file with the following schema in the src folder
+To run locally, you will need to add a config.json file with the following schema in the local_runner folder
 
     {   
 		"client_id": "",
@@ -22,7 +22,7 @@ You can get a refresh token by following the OAuth2 flow against Spotify using P
 	* user-read-recently-played 
 	* user-top-read
 ### local_runner
-There is an included local_runner app that imports the Lambda handler defined in the src folder and runs it locally. Long term, it will also be used to pass configuration into the main app.
+There is an included local_runner app that imports the Lambda handler defined in the src folder and runs it locally.
 
 ## Sources
 https://developer.spotify.com/documentation/web-api/quick-start/
