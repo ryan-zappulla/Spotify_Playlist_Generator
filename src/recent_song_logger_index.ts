@@ -2,7 +2,7 @@ import _ = require("underscore");
 import { Song_Provider, Spotify_Song_Provider } from "./song_provider";
 import { Error_Handler } from "./error_handler";
 import { create_spotify } from "./spotify_factory";
-import { SongLogFacade, DynamoSongLogFacade } from "./song_log_facade";
+import { SongLogFacade, DynamoSongLogFacade, LoggedSong } from "./song_log_facade";
 
 export class Dependencies {
     error_handler : Error_Handler
@@ -40,7 +40,7 @@ export async function handler(dependencies : Dependencies): Promise<void> {
     console.info(`Saving ${songsSinceLastSave.length} songs`)
     for (const song of songsSinceLastSave) {
         try {
-            await dependencies.song_log_facade.log_song_play(song);
+            await dependencies.song_log_facade.log_song_play(new LoggedSong(song.track.id, song.played_at, song.track.name));
         }
         catch (error) {
             dependencies.error_handler.handle_error(error);

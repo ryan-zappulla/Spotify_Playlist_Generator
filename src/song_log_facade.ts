@@ -1,10 +1,21 @@
-require("spotify-web-api-node");
-import { DynamoDBClient, QueryCommandInput, PutItemCommand, PutItemCommandInput, QueryCommand, AttributeValue } from "@aws-sdk/client-dynamodb";
+import { DynamoDBClient, QueryCommandInput, PutItemCommand, PutItemCommandInput, QueryCommand } from "@aws-sdk/client-dynamodb";
 import { marshall } from "@aws-sdk/util-dynamodb";
+
+export class LoggedSong {
+    id: string
+    played_timestamp_utc: string
+    name: string
+
+    constructor(id: string, played_timestamp_utc: string, name: string) {
+        this.id = id;
+        this.played_timestamp_utc = played_timestamp_utc;
+        this.name = name;
+    }
+}
 
 export interface SongLogFacade {
     most_recent_play_timestamp() : Promise<string>;
-    log_song_play(song: SpotifyApi.PlayHistoryObject) : Promise<void>;
+    log_song_play(song: LoggedSong) : Promise<void>;
 }
 
 export class DynamoSongLogFacade implements SongLogFacade {
@@ -18,14 +29,14 @@ export class DynamoSongLogFacade implements SongLogFacade {
         this.table_name = table_name;
     }
 
-    async log_song_play(song: SpotifyApi.PlayHistoryObject): Promise<void> {
+    async log_song_play(song: LoggedSong): Promise<void> {
         const input: PutItemCommandInput = {
             TableName: this.table_name,
             Item: marshall({
                 "user_id" : this.user_id,
-                "time_played_utc" : song.played_at,
-                "song_name": song.track.name,
-                "song_id": song.track.id
+                "time_played_utc" : song.played_timestamp_utc,
+                "song_name": song.name,
+                "song_id": song.id
               })
         };
         await this.client.send(new PutItemCommand(input));
@@ -67,9 +78,9 @@ export class NoopSongLogFacade implements SongLogFacade {
         this.timestamp = timestamp;
     }
 
-    log_song_play(song: SpotifyApi.PlayHistoryObject): Promise<void> {
+    log_song_play(song: LoggedSong): Promise<void> {
         return new Promise<void>((resolve) => {
-            console.log(`Saved ${song.track.name}`);
+            console.log(`Saved ${song.name}`);
             resolve();
         });
     }
