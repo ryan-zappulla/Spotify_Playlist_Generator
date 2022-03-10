@@ -28,3 +28,6 @@ There is an included local_runner app that imports the Lambda handler defined in
 https://developer.spotify.com/documentation/web-api/quick-start/
 https://blog.postman.com/generate-spotify-playlists-using-a-postman-collection/
 https://github.com/thelinmichael/spotify-web-api-node
+
+## Other Resources
+https://medium.com/coinmonks/everything-you-wanted-to-know-about-package-lock-json-b81911aa8ab8
