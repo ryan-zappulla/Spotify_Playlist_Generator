@@ -5,11 +5,13 @@ export class LoggedSong {
     id: string
     played_timestamp_utc: string
     name: string
+    provider: string
 
-    constructor(id: string, played_timestamp_utc: string, name: string) {
+    constructor(id: string, played_timestamp_utc: string, name: string, provider: string) {
         this.id = id;
         this.played_timestamp_utc = played_timestamp_utc;
         this.name = name;
+        this.provider = provider;
     }
 }
 
@@ -36,7 +38,8 @@ export class DynamoSongLogFacade implements SongLogFacade {
                 "user_id" : this.user_id,
                 "time_played_utc" : song.played_timestamp_utc,
                 "song_name": song.name,
-                "song_id": song.id
+                "song_id": song.id,
+                "provider": song.provider
               })
         };
         await this.client.send(new PutItemCommand(input));

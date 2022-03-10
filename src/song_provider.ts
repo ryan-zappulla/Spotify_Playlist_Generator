@@ -1,17 +1,33 @@
 import SpotifyWebApi = require("spotify-web-api-node");
 
 export interface Song_Provider {
-    get_recently_played_songs(count?: number) : Promise<SpotifyApi.PlayHistoryObject[]>
+    get_recently_played_songs(count?: number) : Promise<Song[]>
+    name : string
+}
+
+export class Song {
+    id: string
+    played_timestamp_utc: string
+    name: string
+
+    constructor(id: string, played_timestamp_utc: string, name: string) {
+        this.id = id;
+        this.played_timestamp_utc = played_timestamp_utc;
+        this.name = name;
+    }
 }
 
 export class Spotify_Song_Provider implements Song_Provider {
     private spotify: SpotifyWebApi;
-
+    
     constructor(spotify: SpotifyWebApi) {
         this.spotify = spotify;
+        this.name = "spotify";
     }
 
-    async get_recently_played_songs(count?: number) : Promise<SpotifyApi.PlayHistoryObject[]>
+    readonly name: string;
+
+    async get_recently_played_songs(count?: number) : Promise<Song[]>
     {
         const maxCount = 50;
         if(count == undefined)
@@ -29,6 +45,10 @@ export class Spotify_Song_Provider implements Song_Provider {
                 limit: count
             }
         );
-        return response.body.items;
+        return response.body.items.flatMap(spotify_play => this.spotify_play_to_song(spotify_play));
+    }
+
+    private spotify_play_to_song(spotify_play: SpotifyApi.PlayHistoryObject): Song {
+        return new Song(spotify_play.track.id, spotify_play.played_at, spotify_play.track.name);
     }
 }

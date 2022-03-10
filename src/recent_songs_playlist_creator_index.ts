@@ -35,7 +35,9 @@ export async function handler(event : PlaylistCreateEvent, dependencies : Depend
     try {
         let recentSongs = await dependencies.song_provider.get_recently_played_songs();
         let songs = new Set(
-                recentSongs.flatMap(song => `spotify:track:${song.track.id}`) //spotify song ids need to be prefixed with spotify:track:
+                //TODO: This should really be abstracted to some other layer
+                //spotify song ids need to be prefixed with spotify:track:
+                recentSongs.flatMap(song => `spotify:track:${song.id}`)
             ); //Remove duplicates
         await dependencies.playlist_creator.create_playlist(_.shuffle(Array.from(songs)), playlistName, false);
     }

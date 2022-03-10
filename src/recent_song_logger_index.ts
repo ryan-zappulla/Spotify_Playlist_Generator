@@ -1,5 +1,5 @@
 import _ = require("underscore");
-import { Song_Provider, Spotify_Song_Provider } from "./song_provider";
+import { Song, Song_Provider, Spotify_Song_Provider } from "./song_provider";
 import { Error_Handler } from "./error_handler";
 import { create_spotify } from "./spotify_factory";
 import { SongLogFacade, DynamoSongLogFacade, LoggedSong } from "./song_log_facade";
@@ -27,20 +27,21 @@ export async function lambda_handler() : Promise<void> {
 }
 
 export async function handler(dependencies : Dependencies): Promise<void> {
-    let songsSinceLastSave: SpotifyApi.PlayHistoryObject[];
+    let songsSinceLastSave: Song[];
     try {
         let recentSongs = await dependencies.song_provider.get_recently_played_songs();
         let mostRecentSave = await dependencies.song_log_facade.most_recent_play_timestamp();
-        songsSinceLastSave = recentSongs.filter(x => x.played_at > mostRecentSave);
+        songsSinceLastSave = recentSongs.filter(x => x.played_timestamp_utc > mostRecentSave);
     }
     catch (error) {
         dependencies.error_handler.handle_error(error);
         return;
     }
-    console.info(`Saving ${songsSinceLastSave.length} songs`)
+    console.info(`Saving ${songsSinceLastSave.length} songs`);
+    let providerName = dependencies.song_provider.name;
     for (const song of songsSinceLastSave) {
         try {
-            await dependencies.song_log_facade.log_song_play(new LoggedSong(song.track.id, song.played_at, song.track.name));
+            await dependencies.song_log_facade.log_song_play(new LoggedSong(song.id, song.played_timestamp_utc, song.name, providerName));
         }
         catch (error) {
             dependencies.error_handler.handle_error(error);
