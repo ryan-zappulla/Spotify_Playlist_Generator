@@ -1,5 +1,4 @@
-import { DynamoDBClient, QueryCommandInput, PutItemCommand, PutItemCommandInput, QueryCommand } from "@aws-sdk/client-dynamodb";
-import { marshall } from "@aws-sdk/util-dynamodb";
+import { DynamoDBClient, QueryCommandInput, PutItemCommand, PutItemCommandInput, QueryCommand, AttributeValue } from "@aws-sdk/client-dynamodb";
 
 export class LoggedSong {
     id: string
@@ -34,13 +33,13 @@ export class DynamoSongLogFacade implements SongLogFacade {
     async log_song_play(song: LoggedSong): Promise<void> {
         const input: PutItemCommandInput = {
             TableName: this.table_name,
-            Item: marshall({
-                "user_id" : this.user_id,
-                "time_played_utc" : song.played_timestamp_utc,
-                "song_name": song.name,
-                "song_id": song.id,
-                "provider": song.provider
-              })
+            Item: {
+                "user_id": {"S": this.user_id},
+                "time_played_utc" : {"S": song.played_timestamp_utc},
+                "song_name": {"S": song.name},
+                "song_id": {"S": song.id},
+                "provider": {"S": song.provider}
+            }
         };
         await this.client.send(new PutItemCommand(input));
     }
