@@ -1,4 +1,4 @@
-import { DynamoDBClient, QueryCommandInput, PutItemCommand, PutItemCommandInput, QueryCommand, AttributeValue } from "@aws-sdk/client-dynamodb";
+import { DynamoDBClient, QueryCommandInput, PutItemCommand, PutItemCommandInput, QueryCommand } from "@aws-sdk/client-dynamodb";
 
 export class LoggedSong {
     id: string
