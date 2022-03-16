@@ -1,6 +1,6 @@
 import _ = require("underscore");
 import { Playlist_Creator, Spotify_Playlist_Creator } from "./playlist_creator";
-import { Song_Provider, Spotify_Song_Provider } from "./song_provider";
+import { Recent_Song_Provider, Spotify_Song_Provider } from "./song_provider";
 import { Error_Handler } from "./error_handler";
 import { create_spotify } from "./spotify_factory";
 
@@ -10,7 +10,7 @@ export class PlaylistCreateEvent {
 
 export class Dependencies {
     error_handler : Error_Handler
-    song_provider : Song_Provider
+    song_provider : Recent_Song_Provider
     playlist_creator : Playlist_Creator
 }
 

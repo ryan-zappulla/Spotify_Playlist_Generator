@@ -1,11 +1,11 @@
-import { Song, Song_Provider, Spotify_Song_Provider } from "./song_provider";
+import { Song, Recent_Song_Provider, Spotify_Song_Provider } from "./song_provider";
 import { Error_Handler } from "./error_handler";
 import { create_spotify } from "./spotify_factory";
 import { SongLogFacade, DynamoSongLogFacade, LoggedSong } from "./song_log_facade";
 
 export class Dependencies {
     error_handler : Error_Handler
-    song_provider : Song_Provider
+    song_provider : Recent_Song_Provider
     song_log_facade  : SongLogFacade
 }
 
