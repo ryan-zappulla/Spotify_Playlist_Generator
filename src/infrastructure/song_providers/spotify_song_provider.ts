@@ -1,10 +1,6 @@
 import SpotifyWebApi = require("spotify-web-api-node");
-import { Song } from "../domain/song";
-
-export interface Recent_Song_Provider {
-    get_recently_played_songs(count?: number) : Promise<Song[]>
-    name : string
-}
+import { Song } from "../../domain/song";
+import { Recent_Song_Provider } from "./recent_song_provider";
 
 export class Spotify_Song_Provider implements Recent_Song_Provider {
     private spotify: SpotifyWebApi;

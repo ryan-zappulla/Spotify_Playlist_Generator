@@ -1,4 +1,5 @@
-import { Recent_Song_Provider, Spotify_Song_Provider } from "./infrastructure/song_provider";
+import { Spotify_Song_Provider } from "./infrastructure/song_providers/spotify_song_provider";
+import { Recent_Song_Provider } from "./infrastructure/song_providers/recent_song_provider";
 import { Song } from "./domain/song";
 import { Error_Handler } from "./infrastructure/error_handler";
 import { create_spotify } from "./infrastructure/spotify_factory";

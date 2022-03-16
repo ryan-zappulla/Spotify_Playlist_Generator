@@ -1,6 +1,7 @@
 import _ = require("underscore");
 import { Playlist_Creator, Spotify_Playlist_Creator } from "./infrastructure/playlist_creator";
-import { Recent_Song_Provider, Spotify_Song_Provider } from "./infrastructure/song_provider";
+import { Spotify_Song_Provider } from "./infrastructure/song_providers/spotify_song_provider";
+import { Recent_Song_Provider } from "./infrastructure/song_providers/recent_song_provider";
 import { Error_Handler } from "./infrastructure/error_handler";
 import { create_spotify } from "./infrastructure/spotify_factory";
 
@@ -37,8 +38,9 @@ export async function handler(event : PlaylistCreateEvent, dependencies : Depend
         let songs = new Set(
                 //TODO: This should really be abstracted to some other layer
                 //spotify song ids need to be prefixed with spotify:track:
+                //maybe refactor create_playlist to take in an array of songs, then have an ACL doing the mapping
                 recentSongs.flatMap(song => `spotify:track:${song.id}`)
-            ); //Remove duplicates
+            ); //Removes duplicates
         await dependencies.playlist_creator.create_playlist(_.shuffle(Array.from(songs)), playlistName, false);
     }
     catch (error) {
