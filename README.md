@@ -1,5 +1,29 @@
 ﻿# Spotify Playlist Generator
-An AWS Lambda Function that will retrieve a users recently listened to music, grab a random handful of their songs, and turn them into a playlist. This will be triggered daily by a Cloudwatch event.
+Two AWS Lambda Functions that will work in tandem to generate Spotify Playlists based on recently listened to music.
+
+## Major Pieces of Code
+
+### /src/recent_song_logger_index.ts 
+* Provides the Handler function for the Data Retrieval Lambda.
+* Grabs recently played songs and saves them to a DynamoDB
+* The DynamoDB will allow me to get around the 50 recent song query limit built into the Spotify API long term.
+* Triggered every 20 minutes by a Cloudwatch Trigger
+
+### /src/recent_songs_playlist_creator_index.ts
+* Provides the Handler function for the Playlist Creation Lambda.
+* Grabs the recently played songs, dedupes them, and saves them to a playlist.
+* Not currently triggered automatically, though it can run in the cloud via a manual trigger.
+* It currently points to Spotifies API to get the recent songs, and needs to be updated to point to the DynamoDB.
+
+### /infrastructure
+* Contains Terraform defining the following infrastructure pieces in AWS
+	* The Data Retrieval Lambda
+	* The Playlist Creation Lambda
+	* The Song Long DynamoDB
+		* Hash key of user_id
+		* Range key of time_played_utc
+	* Various IAM Policies and Roles
+	* Currently there are no Code Pipelines, though that would be a valuable long term add.
 
 ## Running Locally
 
@@ -21,8 +45,12 @@ You can get a refresh token by following the OAuth2 flow against Spotify using P
 	* playlist-modify-private 
 	* user-read-recently-played 
 	* user-top-read
+	
 ### local_runner
-There is an included local_runner app that imports the Lambda handler defined in the src folder and runs it locally.
+There is an included local_runner app that imports a Lambda handler defined in the src folder and runs it locally.
+
+## Disclaimer
+This project is my first real experience with JS and Typescript, and I acknowledge that there are better ways to handle pieces of it, especially in terms of package management.
 
 ## Sources
 https://developer.spotify.com/documentation/web-api/quick-start/

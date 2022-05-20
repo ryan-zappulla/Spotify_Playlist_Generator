@@ -1,9 +1,14 @@
 {
-    "compilerOptions": {
-      "target": "es6",
-      "module": "commonjs",
-      "sourceMap": true,
-      "outDir": "./compiled",
-      "noImplicitAny": true
-    }
-  }
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "sourceMap": true,
+    "outDir": "./compiled",
+    "noImplicitAny": false,
+    "resolveJsonModule": true
+  },
+  "include": [
+    "config.json",
+    "index.ts"
+  ]
+}
