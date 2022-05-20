@@ -34,11 +34,8 @@ export async function handler(event : PlaylistCreateEvent, dependencies : Depend
     let playlistName = event?.PlaylistName?.trim() ? event.PlaylistName : `Programmed Playlist - ${new Date().toLocaleString()}`;
     try {
         let recentSongs = await dependencies.song_provider.get_recently_played_songs();
-        let songs = new Set(
-                //TODO: This should really be abstracted to some other layer
-                //spotify song ids need to be prefixed with spotify:track:
-                recentSongs.flatMap(song => `spotify:track:${song.id}`)
-            ); //Remove duplicates
+        //TODO: This should really be abstracted to some other layer to make the Lambda less coupled to Spotify
+        let songs = new Set(recentSongs.flatMap(song => `spotify:track:${song.id}`)); //Removes duplicates
         await dependencies.playlist_creator.create_playlist(_.shuffle(Array.from(songs)), playlistName, false);
     }
     catch (error) {
