@@ -1,7 +1,7 @@
 ﻿# Spotify Playlist Generator
 Two AWS Lambda Functions that will work in tandem to generate Spotify Playlists based on recently listened to music.
 
-## Major Pieces of Code
+## Major Touchpoints
 
 ### /src/recent_song_logger_index.ts 
 * Provides the Handler function for the Data Retrieval Lambda.
