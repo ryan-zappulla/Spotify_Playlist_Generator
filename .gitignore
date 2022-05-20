@@ -112,3 +112,4 @@ infrastructure/src.zip
 *.backup
 *.zip
 local_runner/config.json
+local_runner/compiled/
